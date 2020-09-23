@@ -15,7 +15,6 @@ userRouter.get("/", (req, res) => {
     const cookieAsArray = cookie.split("=")
     const userId = Number(cookieAsArray[cookieAsArray.length-1])
   
-    //See if user exists in db (in sessions table)
     Login.getUserId(userId)
     .then(user => {
         if (!user) {

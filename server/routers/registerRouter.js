@@ -20,13 +20,21 @@ registerRouter.post('/', (req, res) => {
 	if (!first_name || !last_name || !age || !password || !username) {
 		return res.status(400).json({ error: 'All fields are required' });
 	}
-
+	//See if user already exists in DB
+	User.getUser(newUser.username)
+		.then((user) => {
+			if (user) return res.status(409).json({error: "User already exists"})
+		.catch((err) => {
+			return res.status(500).json({ error: err });
+		});
+			//IF new user, then add the user
 	User.addNewUser(newUser)
 		.then((user) => {
-			res.status(201).json(newUser);
+			return res.status(201).json(newUser);
 		})
+	})
 		.catch((err) => {
-			return res.status(500).json({ error: 'Server Error' });
+			return res.status(500).json({ error: err });
 		});
 });
 
